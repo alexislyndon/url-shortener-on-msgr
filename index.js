@@ -1,5 +1,5 @@
 "use strict";
-const urlchecker = require('is-url');
+// const urlchecker = require('is-url');
 
 // const http = require("http");
 
@@ -92,7 +92,7 @@ function handleMessage(sender_psid, received_message) {
 
 
   // Check if the message contains text
-  if (received_message.text && urlchecker.isUrl(received_message.text)) {
+  if (received_message.text) {
     var shortUrl = require("node-url-shortener");
 
     shortUrl.short(received_message.text, function (err, url) {
