@@ -1,5 +1,6 @@
 "use strict";
-require('dotenv').config()
+require("dotenv").config();
+const request = require('request');
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 // const urlchecker = require('is-url');
 

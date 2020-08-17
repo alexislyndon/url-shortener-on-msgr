@@ -13,6 +13,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "is-url": "^1.2.4",
-    "node-url-shortener": "^1.1.10"
+    "node-url-shortener": "^1.1.10",
+    "request": "^2.88.2"
   }
 }
