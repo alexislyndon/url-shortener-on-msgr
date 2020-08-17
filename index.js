@@ -1,6 +1,6 @@
 "use strict";
 require("dotenv").config();
-const request = require('request');
+const request = require("request");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 // const urlchecker = require('is-url');
 
@@ -91,16 +91,16 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-    let response;
+  let response;
 
   // Check if the message contains text
   if (received_message.text) {
     var shortUrl = require("node-url-shortener");
 
     shortUrl.short(received_message.text, function (err, url) {
-        response = {
-            "text": url
-        }
+      response = {
+        "text": `Shortened URL: "${url}"`
+      };
       callSendAPI(sender_psid, response);
     });
 
