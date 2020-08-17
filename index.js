@@ -112,9 +112,10 @@ function callSendAPI(sender_psid, response) {
     recipient: {
       id: sender_psid,
     },
-    message: {text:"Thank you for using the App. Please consider liking the page if you like it!"},
+    message: {text:"Don't forget to Like and Share! Here is your shortened URL: "},
   };
 
+  //some greetings
   request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
@@ -126,7 +127,7 @@ function callSendAPI(sender_psid, response) {
       if (!err) {
         console.log("greetings sent!");
       } else {
-        console.error("Unable to send message:" + err);
+        console.error("Unable to send greetings:" + err);
       }
     }
   );
