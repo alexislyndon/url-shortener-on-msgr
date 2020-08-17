@@ -1,4 +1,6 @@
 "use strict";
+const urlchecker = require('is-url');
+
 // const http = require("http");
 
 // const port = process.env.PORT || 3000;
@@ -87,10 +89,10 @@ app.get("/webhook", (req, res) => {
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
   //   let response;
-  var isurl = require('is-url');
+
 
   // Check if the message contains text
-  if (received_message.text && isurl.isUrl(received_message.text)) {
+  if (received_message.text && urlchecker.isUrl(received_message.text)) {
     var shortUrl = require("node-url-shortener");
 
     shortUrl.short(received_message.text, function (err, url) {
