@@ -21,6 +21,10 @@ const express = require("express"),
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
 
+app.get('/', function (req, res) {
+    res.render('index', {});
+  });
+
 //POST
 // Creates the endpoint for our webhook
 app.post("/webhook", (req, res) => {
@@ -29,15 +33,26 @@ app.post("/webhook", (req, res) => {
   // Checks this is an event from a page subscription
   if (body.object === "page") {
     // Iterates over each entry - there may be multiple if batched
-    body.entry.forEach(function (entry) {
-      // Gets the body of the webhook event
-      let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
+    body.entry.forEach(function(entry) {
 
-      // Get the sender PSID
-      let sender_psid = webhook_event.sender.id;
-      console.log("Sender PSID: " + sender_psid);
-    });
+        // Gets the body of the webhook event
+        let webhook_event = entry.messaging[0];
+        console.log(webhook_event);
+      
+      
+        // Get the sender PSID
+        let sender_psid = webhook_event.sender.id;
+        console.log('Sender PSID: ' + sender_psid);
+      
+        // Check if the event is a message or postback and
+        // pass the event to the appropriate handler function
+        if (webhook_event.message) {
+          handleMessage(sender_psid, webhook_event.message);        
+        } else if (webhook_event.postback) {
+          handlePostback(sender_psid, webhook_event.postback);
+        }
+        
+      });
 
     // Returns a '200 OK' response to all requests
     res.status(200).send("EVENT_RECEIVED");
@@ -72,14 +87,16 @@ app.get("/webhook", (req, res) => {
   }
 });
 
-// var shortUrl = require('node-url-shortener');
-
-// shortUrl.short('rfhaiyan.ph', function(err, url){
-//     console.log(url);
-// });
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {}
+function handleMessage(sender_psid, received_message) {
+
+    var shortUrl = require('node-url-shortener');
+    
+    shortUrl.short(received_message, function(err, url){
+        console.log(url);
+    });
+}
 
 // Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {}
