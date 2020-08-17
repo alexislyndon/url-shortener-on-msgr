@@ -93,7 +93,7 @@ function handleMessage(sender_psid, received_message) {
 
     var shortUrl = require('node-url-shortener');
     
-    shortUrl.short(received_message, function(err, url){
+    shortUrl.short(received_message.text, function(err, url){
         console.log(url);
     });
 }
