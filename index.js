@@ -86,10 +86,11 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-//   let response;
+  //   let response;
+  var isurl = require('is-url');
 
   // Check if the message contains text
-  if (received_message.text && isUrl(received_message.text)) {
+  if (received_message.text && isUrl.isUrl(received_message.text)) {
     var shortUrl = require("node-url-shortener");
 
     shortUrl.short(received_message.text, function (err, url) {
