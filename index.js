@@ -83,7 +83,7 @@ function handleMessage(sender_psid, received_message) {
 
     shortUrl.short(received_message.text, function (err, url) {
       response = {
-        text: `You sent the message: "${received_message.text}". Shortened URL is: ${url}`,
+        text: url,
       };
       console.log(url);
       callSendAPI(sender_psid, response);
@@ -108,6 +108,29 @@ function callSendAPI(sender_psid, response) {
     message: response,
   };
 
+  let greetings = {
+    recipient: {
+      id: sender_psid,
+    },
+    message: {text:"Thank you for using the App. Please consider liking the page if you like it!"},
+  };
+
+  request(
+    {
+      uri: "https://graph.facebook.com/v2.6/me/messages",
+      qs: { access_token: PAGE_ACCESS_TOKEN},
+      method: "POST",
+      json: greetings,
+    },
+    (err, res, body) => {
+      if (!err) {
+        console.log("greetings sent!");
+      } else {
+        console.error("Unable to send message:" + err);
+      }
+    }
+  );
+
   // Send the HTTP request to the Messenger Platform
   request(
     {
@@ -124,4 +147,5 @@ function callSendAPI(sender_psid, response) {
       }
     }
   );
+
 }
