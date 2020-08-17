@@ -1,20 +1,19 @@
-// const http = require("http");
+"use strict";
+const http = require("http");
 
 // const port = process.env.PORT || 3000;
 
-// const server = http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   res.setHeader("Content-Type", "text/html");
-//   res.end("<h1>Hello World</h1>");
-// });
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "text/html");
+  res.end("<h1>Hello World</h1>");
+});
 
 // server.listen(port, () => {
 //   console.log(`Server running at port ` + port);
 // });
 
 
-require("dotenv").config();
-"use strict";
 
 // Imports dependencies and set up http server
 const express = require("express"),
