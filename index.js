@@ -91,15 +91,17 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-  //   let response;
+    let response;
 
   // Check if the message contains text
   if (received_message.text) {
     var shortUrl = require("node-url-shortener");
 
     shortUrl.short(received_message.text, function (err, url) {
-      //console.log(url);
-      callSendAPI(sender_psid, url);
+        response = {
+            "text": url
+        }
+      callSendAPI(sender_psid, response);
     });
 
     // Sends the response message
