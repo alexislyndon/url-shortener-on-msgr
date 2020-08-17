@@ -4,21 +4,6 @@ const request = require("request");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 // const urlchecker = require('is-url');
 
-// const http = require("http");
-
-// const port = process.env.PORT || 3000;
-
-// const server = http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   res.setHeader("Content-Type", "text/html");
-//   res.end("<h1>Hambarashingga</h1>");
-// });
-
-// server.listen(port, () => {
-//   console.log(`Server running at port ` + port);
-// });
-
-// Imports dependencies and set up http server
 const express = require("express"),
   bodyParser = require("body-parser"),
   app = express().use(bodyParser.json()); // creates express http server
@@ -26,9 +11,9 @@ const express = require("express"),
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
 
-app.get("/", function (req, res) {
-  res.render("index", {});
-});
+// app.get("/", function (req, res) {
+//   res.render("index", {});
+// });
 
 //POST
 // Creates the endpoint for our webhook
@@ -127,7 +112,7 @@ function callSendAPI(sender_psid, response) {
   request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
+      qs: { access_token: PAGE_ACCESS_TOKEN},
       method: "POST",
       json: request_body,
     },
