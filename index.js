@@ -100,6 +100,7 @@ function handlePostback(sender_psid, received_postback) {}
 
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
+  greet(sender_psid, response);
   // Construct the message body
   let request_body = {
     recipient: {
@@ -108,35 +109,11 @@ function callSendAPI(sender_psid, response) {
     message: response,
   };
 
-  let greetings = {
-    recipient: {
-      id: sender_psid,
-    },
-    message: {text:"Don't forget to Like and Share! Here is your shortened URL: "},
-  };
-
-  //some greetings
-  request(
-    {
-      uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: PAGE_ACCESS_TOKEN},
-      method: "POST",
-      json: greetings,
-    },
-    (err, res, body) => {
-      if (!err) {
-        console.log("greetings sent!");
-      } else {
-        console.error("Unable to send greetings:" + err);
-      }
-    }
-  );
-
   // Send the HTTP request to the Messenger Platform
   request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: PAGE_ACCESS_TOKEN},
+      qs: { access_token: PAGE_ACCESS_TOKEN },
       method: "POST",
       json: request_body,
     },
@@ -148,5 +125,32 @@ function callSendAPI(sender_psid, response) {
       }
     }
   );
+}
 
+async function greet(sender_psid, response) {
+  let greetings = {
+    recipient: {
+      id: sender_psid,
+    },
+    message: {
+      text: "Don't forget to Like and Share! Here is your shortened URL: ",
+    },
+  };
+
+  //some greetings
+  request(
+    {
+      uri: "https://graph.facebook.com/v2.6/me/messages",
+      qs: { access_token: PAGE_ACCESS_TOKEN },
+      method: "POST",
+      json: greetings,
+    },
+    (err, res, body) => {
+      if (!err) {
+        console.log("greetings sent!");
+      } else {
+        console.error("Unable to send greetings:" + err);
+      }
+    }
+  );
 }
