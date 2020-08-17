@@ -98,9 +98,9 @@ function handleMessage(sender_psid, received_message) {
     var shortUrl = require("node-url-shortener");
 
     shortUrl.short(received_message.text, function (err, url) {
-      response = {
-        "text": `Shortened URL: "${url}"`
-      };
+        response = {
+            "text": `You sent the message: "${received_message.text}". Shortened URL is: ${url}`
+          }
       console.log(url);
       callSendAPI(sender_psid, response);
     });
