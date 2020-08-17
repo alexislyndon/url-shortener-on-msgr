@@ -101,6 +101,7 @@ function handleMessage(sender_psid, received_message) {
       response = {
         "text": `Shortened URL: "${url}"`
       };
+      console.log(url);
       callSendAPI(sender_psid, response);
     });
 
