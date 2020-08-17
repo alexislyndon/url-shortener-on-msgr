@@ -1,13 +1,13 @@
 "use strict";
-const http = require("http");
+// const http = require("http");
 
 // const port = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/html");
-  res.end("<h1>Hambarashingga</h1>");
-});
+// const server = http.createServer((req, res) => {
+//   res.statusCode = 200;
+//   res.setHeader("Content-Type", "text/html");
+//   res.end("<h1>Hambarashingga</h1>");
+// });
 
 // server.listen(port, () => {
 //   console.log(`Server running at port ` + port);
@@ -22,6 +22,8 @@ const express = require("express"),
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
+
+
 
 // Creates the endpoint for our webhook
 app.post("/webhook", (req, res) => {
