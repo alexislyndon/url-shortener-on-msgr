@@ -1,8 +1,8 @@
 "use strict";
 require("dotenv").config();
 const request = require("request");
-const isurl = require("is-url");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+const isurl = require("is-url");
 // const urlchecker = require('is-url');
 
 const express = require("express"),
@@ -97,7 +97,7 @@ function handleMessage(sender_psid, received_message) {
 
     // Sends the response message
   } else {
-    callSendAPI(sender_psid, "Please Enter a Valid URL");
+    console.log("error")
   }
 }
 
