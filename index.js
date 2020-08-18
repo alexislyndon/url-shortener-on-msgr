@@ -2,7 +2,7 @@
 require("dotenv").config();
 const request = require("request");
 const isUrl = require("is-url");
-const validator = require("validator");
+const val = require("validator");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 
 const express = require("express"),
@@ -79,8 +79,9 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
+  console.log(val.isURL(received_message.text) + "url")
   // Check if the message contains text
-  if (received_message.text && validator.isURL(received_message.text)) {
+  if (received_message.text && val.isURL(received_message.text)) {
     let response;
     var shortUrl = require("node-url-shortener");
 
