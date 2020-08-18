@@ -2,16 +2,17 @@
 require("dotenv").config();
 const request = require("request");
 const isUrl = require("is-url");
+const validator = require("validator");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-// const isurl = require("is-url");
-// const urlchecker = require('is-url');
 
 const express = require("express"),
   bodyParser = require("body-parser"),
   app = express().use(bodyParser.json()); // creates express http server
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
+app.listen(process.env.PORT || 1337, () =>
+  console.log("SEND ME THE URLS NOW!")
+);
 
 // app.get("/", function (req, res) {
 //   res.render("index", {});
@@ -78,9 +79,8 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-
   // Check if the message contains text
-  if (received_message.text && isUrl(received_message)) {
+  if (received_message.text && validator.isURL(received_message.text)) {
     let response;
     var shortUrl = require("node-url-shortener");
 
