@@ -1,6 +1,7 @@
 "use strict";
 require("dotenv").config();
 const request = require("request");
+const isurl = require("is-url");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 // const urlchecker = require('is-url');
 
@@ -76,6 +77,11 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
+  if(!isurl(received_message)) {
+    nourl();
+    return;
+  }
+
   // Check if the message contains text
   if (received_message.text) {
     let response;
@@ -134,6 +140,34 @@ async function greet(sender_psid, response) {
     },
     message: {
       text: "Don't forget to Like and Share! Here is your shortened URL: ",
+    },
+  };
+
+  //some greetings
+  request(
+    {
+      uri: "https://graph.facebook.com/v2.6/me/messages",
+      qs: { access_token: PAGE_ACCESS_TOKEN },
+      method: "POST",
+      json: greetings,
+    },
+    (err, res, body) => {
+      if (!err) {
+        console.log("greetings sent!");
+      } else {
+        console.error("Unable to send greetings:" + err);
+      }
+    }
+  );
+}
+
+async function nourl(sender_psid, response) {
+  let greetings = {
+    recipient: {
+      id: sender_psid,
+    },
+    message: {
+      text: "Please enter a valid URL.",
     },
   };
 
