@@ -4,6 +4,7 @@ const request = require("request");
 const val = require("validator");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 var shortUrl = require("node-url-shortener");
+const path = require('path');
 const express = require("express"),
   bodyParser = require("body-parser"),
   app = express().use(bodyParser.json()); // creates express http server
