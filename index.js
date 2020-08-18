@@ -1,10 +1,9 @@
 "use strict";
 require("dotenv").config();
 const request = require("request");
-const isUrl = require("is-url");
 const val = require("validator");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-
+var shortUrl = require("node-url-shortener");
 const express = require("express"),
   bodyParser = require("body-parser"),
   app = express().use(bodyParser.json()); // creates express http server
@@ -83,7 +82,6 @@ function handleMessage(sender_psid, received_message) {
   // Check if the message contains text
   if (received_message.text && val.isURL(received_message.text)) {
     let response;
-    var shortUrl = require("node-url-shortener");
 
     shortUrl.short(received_message.text, function (err, url) {
       response = {
