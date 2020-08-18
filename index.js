@@ -2,7 +2,7 @@
 require("dotenv").config();
 const request = require("request");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-const isurl = require("is-url");
+// const isurl = require("is-url");
 // const urlchecker = require('is-url');
 
 const express = require("express"),
@@ -77,10 +77,10 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-  if(!isurl(received_message)) {
-    nourl();
-    return;
-  }
+  // if(!isurl(received_message)) {
+  //   nourl();
+  //   return;
+  // }
 
   // Check if the message contains text
   if (received_message.text) {
@@ -161,30 +161,30 @@ async function greet(sender_psid, response) {
   );
 }
 
-async function nourl(sender_psid, response) {
-  let greetings = {
-    recipient: {
-      id: sender_psid,
-    },
-    message: {
-      text: "Please enter a valid URL.",
-    },
-  };
+// async function nourl(sender_psid, response) {
+//   let greetings = {
+//     recipient: {
+//       id: sender_psid,
+//     },
+//     message: {
+//       text: "Please enter a valid URL.",
+//     },
+//   };
 
-  //some greetings
-  request(
-    {
-      uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: PAGE_ACCESS_TOKEN },
-      method: "POST",
-      json: greetings,
-    },
-    (err, res, body) => {
-      if (!err) {
-        console.log("greetings sent!");
-      } else {
-        console.error("Unable to send greetings:" + err);
-      }
-    }
-  );
-}
+//   //some greetings
+//   request(
+//     {
+//       uri: "https://graph.facebook.com/v2.6/me/messages",
+//       qs: { access_token: PAGE_ACCESS_TOKEN },
+//       method: "POST",
+//       json: greetings,
+//     },
+//     (err, res, body) => {
+//       if (!err) {
+//         console.log("greetings sent!");
+//       } else {
+//         console.error("Unable to send greetings:" + err);
+//       }
+//     }
+//   );
+// }
