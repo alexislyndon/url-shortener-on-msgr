@@ -6,9 +6,37 @@
     <title>Shorten URL on Messenger</title>
 </head>
 <body>
+
+    <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '1187681034957496',
+            xfbml      : true,
+            version    : 'v8.0'
+          });
+          FB.AppEvents.logPageView();
+        };
+      
+        (function(d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement(s); js.id = id;
+           js.src = "https://connect.facebook.net/en_US/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+      </script>
+
     <div style="display: grid; width: 600px; margin: auto;">
         Send us a message of your long URL and we'll respond with a shortened URL.
         <a href="https://m.me/shorturlmsngr" target="_blank">URL Shortener on Messenger</a>
+
+        <div
+        class="fb-like"
+        data-share="true"
+        data-width="450"
+        data-show-faces="true">
+      </div>
+
     </div>
 </body>
 </html>
