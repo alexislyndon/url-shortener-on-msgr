@@ -1,6 +1,7 @@
 "use strict";
 require("dotenv").config();
 const request = require("request");
+const isUrl = require("is-url");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 // const isurl = require("is-url");
 // const urlchecker = require('is-url');
@@ -77,13 +78,9 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-  // if(!isurl(received_message)) {
-  //   nourl();
-  //   return;
-  // }
 
   // Check if the message contains text
-  if (received_message.text) {
+  if (received_message.text && isUrl(received_message)) {
     let response;
     var shortUrl = require("node-url-shortener");
 
@@ -92,12 +89,12 @@ function handleMessage(sender_psid, received_message) {
         text: url,
       };
       console.log(url);
-      callSendAPI(sender_psid, response);
+      greet(sender_psid).then(callSendAPI(sender_psid, response));
     });
 
     // Sends the response message
   } else {
-    console.log("error")
+    nourl(sender_psid);
   }
 }
 
@@ -106,7 +103,6 @@ function handlePostback(sender_psid, received_postback) {}
 
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
-  greet(sender_psid, response);
   // Construct the message body
   let request_body = {
     recipient: {
@@ -133,7 +129,7 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
-async function greet(sender_psid, response) {
+async function greet(sender_psid) {
   let greetings = {
     recipient: {
       id: sender_psid,
@@ -161,30 +157,30 @@ async function greet(sender_psid, response) {
   );
 }
 
-// async function nourl(sender_psid, response) {
-//   let greetings = {
-//     recipient: {
-//       id: sender_psid,
-//     },
-//     message: {
-//       text: "Please enter a valid URL.",
-//     },
-//   };
+async function nourl(sender_psid) {
+  let greetings = {
+    recipient: {
+      id: sender_psid,
+    },
+    message: {
+      text: "Please enter a valid URL.",
+    },
+  };
 
-//   //some greetings
-//   request(
-//     {
-//       uri: "https://graph.facebook.com/v2.6/me/messages",
-//       qs: { access_token: PAGE_ACCESS_TOKEN },
-//       method: "POST",
-//       json: greetings,
-//     },
-//     (err, res, body) => {
-//       if (!err) {
-//         console.log("greetings sent!");
-//       } else {
-//         console.error("Unable to send greetings:" + err);
-//       }
-//     }
-//   );
-// }
+  //some greetings
+  request(
+    {
+      uri: "https://graph.facebook.com/v2.6/me/messages",
+      qs: { access_token: PAGE_ACCESS_TOKEN },
+      method: "POST",
+      json: greetings,
+    },
+    (err, res, body) => {
+      if (!err) {
+        console.log("msg not a url");
+      } else {
+        console.error("Unable to send error message:" + err);
+      }
+    }
+  );
+}
