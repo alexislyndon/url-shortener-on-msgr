@@ -13,9 +13,18 @@ app.listen(process.env.PORT || 1337, () =>
   console.log("SEND ME THE URLS NOW!")
 );
 
-// app.get("/", function (req, res) {
-//   res.render("index", {});
-// });
+app.use(function (req, res, next) {
+  console.log('Time:', Date.now())
+  console.log(req+res+next)
+  next()
+})
+
+// default URL for website
+app.use('/', function(req,res){
+  res.sendFile('./index.html')
+  // res.sendFile(path.join(__dirname+'/public/index.html'));
+  //__dirname : It will resolve to your project folder.
+});
 
 //POST
 // Creates the endpoint for our webhook
