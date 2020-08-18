@@ -15,11 +15,7 @@ app.listen(process.env.PORT || 1337, () =>
 );
 
 // default URL for website
-app.use('/', (req,res) => {
-  // res.sendFile('./index.html')
-  res.sendFile(path.join(__dirname+'/public/index.html'));
-  //__dirname : It will resolve to your project folder.
-});
+
 
 //POST
 // Creates the endpoint for our webhook
@@ -187,3 +183,9 @@ async function nourl(sender_psid) {
     }
   );
 }
+
+app.use('/', (req,res) => {
+  // res.sendFile('./index.html')
+  res.sendFile(path.join(__dirname+'/public/index.html'));
+  //__dirname : It will resolve to your project folder.
+});
