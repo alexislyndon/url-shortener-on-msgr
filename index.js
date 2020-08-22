@@ -14,13 +14,11 @@ app.listen(process.env.PORT || 1337, () =>
   console.log("SEND ME THE URLS NOW!")
 );
 
-// default URL for website
-
-
 //POST
 // Creates the endpoint for our webhook
 app.post("/webhook", (req, res) => {
   let body = req.body;
+  console.log(body)
 
   // Checks this is an event from a page subscription
   if (body.object === "page") {
@@ -78,23 +76,29 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-  console.log(val.isURL(received_message.text) + "url")
+  // console.log(val.isURL(received_message.text) + "url")
   // Check if the message contains text
-  if (received_message.text && val.isURL(received_message.text)) {
-    let response;
-
-    shortUrl.short(received_message.text, function (err, url) {
-      response = {
-        text: url,
-      };
-      console.log(url);
-      greet(sender_psid).then(callSendAPI(sender_psid, response));
-    });
-
-    // Sends the response message
-  } else {
+  try {
+    if (received_message.text && val.isURL(received_message.text)) {
+      let response;
+  
+      shortUrl.short(received_message.text, function (err, url) {
+        response = {
+          text: url,
+        };
+        console.log(url);
+        greet(sender_psid).then(callSendAPI(sender_psid, response));
+      });
+  
+      // Sends the response message
+    } else {
+      nourl(sender_psid);
+    }
+  } catch (error) {
+    console.log(error)
     nourl(sender_psid);
   }
+  
 }
 
 // Handles messaging_postbacks events
