@@ -5,14 +5,14 @@ const val = require("validator");
 const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 var shortUrl = require("node-url-shortener");
 const path = require('path');
-const express = require("express"),
-  bodyParser = require("body-parser"),
-  app = express().use(bodyParser.json()); // creates express http server
 
+const express = require("express"),
+const app = express();
+app.use(express.json());
+
+let PORT = process.env.PORT || 1337;
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () =>
-  console.log("SEND ME THE URLS NOW!")
-);
+app.listen(PORT, () => console.log(`Server running at port ${PORT}`));
 
 //POST
 // Creates the endpoint for our webhook
@@ -26,7 +26,7 @@ app.post("/webhook", (req, res) => {
     body.entry.forEach(function (entry) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
+      console.log("webhook event obj: "+webhook_event);
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
@@ -35,8 +35,10 @@ app.post("/webhook", (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
+        console.log("handling a message");
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
+        console.log("handling a postback")
         handlePostback(sender_psid, webhook_event.postback);
       }
     });
@@ -92,9 +94,11 @@ function handleMessage(sender_psid, received_message) {
   
       // Sends the response message
     } else {
+      console.log("no url or no text in message")
       nourl(sender_psid);
     }
   } catch (error) {
+    console.log("error catched")
     console.log(error)
     nourl(sender_psid);
   }
