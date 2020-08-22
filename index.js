@@ -6,7 +6,7 @@ const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 var shortUrl = require("node-url-shortener");
 const path = require('path');
 
-const express = require("express"),
+const express = require("express");
 const app = express();
 app.use(express.json());
 
