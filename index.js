@@ -35,7 +35,7 @@ app.post("/webhook", (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        console.log("handling a message: " + webhook_event.message);
+        console.log("handling a message: " + webhook_event.message.text);
         typing(sender_psid);
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
@@ -152,7 +152,7 @@ async function greet(sender_psid) {
   };
 
   //some greetings
-  console.log("grrrr:" + request(
+  var tt = request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
       qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -166,7 +166,8 @@ async function greet(sender_psid) {
         console.error("Unable to send greetings:" + err);
       }
     }
-  ))
+  )
+  console.log("yow: "+JSON.stringify(tt))
 }
 
 async function nourl(sender_psid) {
