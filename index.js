@@ -84,8 +84,8 @@ function handleMessage(sender_psid, received_message) {
   
   try {
     if (received_message.text && val.isURL(received_message.text)) {
-      greet(sender_psid)
-      console.log("Message was: "+received_message.text);
+      greet(sender_psid).then( () => {
+        console.log("Message was: "+received_message.text);
       let response;
       
       shortUrl.short(received_message.text, function (err, url) {
@@ -95,10 +95,12 @@ function handleMessage(sender_psid, received_message) {
         console.log("Shortened URL is: "+url);
         callSendAPI(sender_psid, response);
       });
+      })
+      
 
       // Sends the response message
     } else {
-      console.log("no url or no text in message");
+      //console.log("no url or no text in message");
       nourl(sender_psid);
     }
   } catch (error) {
@@ -150,7 +152,7 @@ async function greet(sender_psid) {
   };
 
   //some greetings
-  console.log(request(
+  console.log("grrrr:" + request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
       qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -177,7 +179,7 @@ async function nourl(sender_psid) {
     },
   };
 
-  //some greetings
+  //SEND API 'Please enter a valid URL.'
   request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
@@ -187,7 +189,7 @@ async function nourl(sender_psid) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("msg not a url");
+        console.log("\'Please enter a valid URL.\' message sent.");
       } else {
         console.error("Unable to send error message:" + err);
       }
