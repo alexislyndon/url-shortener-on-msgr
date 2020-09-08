@@ -161,18 +161,12 @@ async function greet(sender_psid) {
     (err, res, body) => {
       if (!err) {
         console.log("Greetings Sent!");
+        console.log(res + res.statusCode)
       } else {
         console.error("Unable to send greetings:" + err);
       }
     }
   )
-  console.log("yow: "+JSON.stringify(tt.on('response',(res)=> {
-    if (res.statusCode == 200) {
-      console.log("CODE WAS 200")
-    } else {
-      console.log("WASNT 200")
-    }
-  })))
 }
 
 async function nourl(sender_psid) {
