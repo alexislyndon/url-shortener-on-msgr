@@ -35,7 +35,7 @@ app.post("/webhook", (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        console.log("handling a message");
+        console.log("handling a message: " + webhook_event.message);
         typing(sender_psid);
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
@@ -85,7 +85,7 @@ function handleMessage(sender_psid, received_message) {
   try {
     if (received_message.text && val.isURL(received_message.text)) {
       greet(sender_psid).then( () => {
-        console.log("Message was: "+received_message.text);
+        //console.log("Message was: " + received_message.text);
       let response;
       
       shortUrl.short(received_message.text, function (err, url) {
