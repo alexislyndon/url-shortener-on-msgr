@@ -29,13 +29,14 @@ app.post("/webhook", (req, res) => {
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      typing(sender_psid);
+
       //console.log("Sender PSID: " + sender_psid);
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
         console.log("handling a message");
+        typing(sender_psid);
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
         console.log("handling a postback");
@@ -80,18 +81,18 @@ app.get("/webhook", (req, res) => {
 function handleMessage(sender_psid, received_message) {
   // console.log(val.isURL(received_message.text) + "url")
   // Check if the message contains text
-  
+
   try {
     if (received_message.text && val.isURL(received_message.text)) {
-      console.log("Message was: "+received_message.text);
+      console.log("Message was: " + received_message.text);
       let response;
 
       shortUrl.short(received_message.text, function (err, url) {
         response = {
           text: url,
         };
-        console.log("Shortened URL is: "+url);
-        greet(sender_psid).then(callSendAPI(sender_psid, response));
+        console.log("Shortened URL is: " + url);
+        greet(sender_psid, response);
       });
 
       // Sends the response message
@@ -137,7 +138,7 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
-async function greet(sender_psid) {
+async function greet(sender_psid, response) {
   let greetings = {
     recipient: {
       id: sender_psid,
@@ -148,21 +149,25 @@ async function greet(sender_psid) {
   };
 
   //some greetings
-  console.log(request(
-    {
-      uri: "https://graph.facebook.com/v2.6/me/messages",
-      qs: { access_token: PAGE_ACCESS_TOKEN },
-      method: "POST",
-      json: greetings,
-    },
-    (err, res, body) => {
-      if (!err) {
-        console.log("Greetings Sent!");
-      } else {
-        console.error("Unable to send greetings:" + err);
-      }
-    }
-  ).response)
+  console.log(
+    "GREET RES: " +
+      request(
+        {
+          uri: "https://graph.facebook.com/v2.6/me/messages",
+          qs: { access_token: PAGE_ACCESS_TOKEN },
+          method: "POST",
+          json: greetings,
+        },
+        (err, res, body) => {
+          if (!err) {
+            console.log("Greetings Sent!");
+          } else {
+            console.error("Unable to send greetings:" + err);
+          }
+        },
+        callSendAPI(sender_psid, response)
+      )
+  );
 }
 
 async function nourl(sender_psid) {
