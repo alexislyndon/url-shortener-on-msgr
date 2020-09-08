@@ -161,7 +161,7 @@ async function greet(sender_psid) {
     (err, res, body) => {
       if (!err) {
         console.log("Greetings Sent!");
-        console.log(res + res.statusCode)
+        console.log(JSON.stringify(res) + res.statusCode)
       } else {
         console.error("Unable to send greetings:" + err);
       }
