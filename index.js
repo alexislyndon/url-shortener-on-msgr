@@ -164,7 +164,7 @@ async function greet(sender_psid) {
         console.error("Unable to send greetings:" + err);
       }
     }
-  ).response)
+  ))
 }
 
 async function nourl(sender_psid) {
