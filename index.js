@@ -17,7 +17,7 @@ app.listen(PORT, () => console.log(`Server running at port ${PORT}`));
 // Creates the endpoint for our webhook
 app.post("/webhook", (req, res) => {
   let body = req.body;
-  console.log(body);
+  //console.log(body);
 
   // Checks this is an event from a page subscription
   if (body.object === "page") {
@@ -25,11 +25,12 @@ app.post("/webhook", (req, res) => {
     body.entry.forEach(function (entry) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
-      console.log("webhook event obj: " + webhook_event);
+      //console.log("webhook event obj: " + webhook_event);
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      console.log("Sender PSID: " + sender_psid);
+      typing(sender_psid);
+      //console.log("Sender PSID: " + sender_psid);
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
@@ -79,16 +80,17 @@ app.get("/webhook", (req, res) => {
 function handleMessage(sender_psid, received_message) {
   // console.log(val.isURL(received_message.text) + "url")
   // Check if the message contains text
-  typing(sender_psid);
+  
   try {
     if (received_message.text && val.isURL(received_message.text)) {
+      console.log("Message was: "+received_message.text);
       let response;
 
       shortUrl.short(received_message.text, function (err, url) {
         response = {
           text: url,
         };
-        console.log(url);
+        console.log("Shortened URL is: "+url);
         greet(sender_psid).then(callSendAPI(sender_psid, response));
       });
 
@@ -127,7 +129,7 @@ function callSendAPI(sender_psid, response) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("message sent!");
+        console.log("URL Shortened Successfully! ~~");
       } else {
         console.error("Unable to send message:" + err);
       }
@@ -146,7 +148,7 @@ async function greet(sender_psid) {
   };
 
   //some greetings
-  request(
+  console.log(request(
     {
       uri: "https://graph.facebook.com/v2.6/me/messages",
       qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -155,12 +157,12 @@ async function greet(sender_psid) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("greetings sent!");
+        console.log("Greetings Sent!");
       } else {
         console.error("Unable to send greetings:" + err);
       }
     }
-  );
+  ).response)
 }
 
 async function nourl(sender_psid) {
