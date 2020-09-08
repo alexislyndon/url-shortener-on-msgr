@@ -29,7 +29,7 @@ app.post("/webhook", (req, res) => {
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-
+      
       //console.log("Sender PSID: " + sender_psid);
 
       // Check if the event is a message or postback and
@@ -81,18 +81,19 @@ app.get("/webhook", (req, res) => {
 function handleMessage(sender_psid, received_message) {
   // console.log(val.isURL(received_message.text) + "url")
   // Check if the message contains text
-
+  
   try {
     if (received_message.text && val.isURL(received_message.text)) {
-      console.log("Message was: " + received_message.text);
+      greet(sender_psid)
+      console.log("Message was: "+received_message.text);
       let response;
-
+      
       shortUrl.short(received_message.text, function (err, url) {
         response = {
           text: url,
         };
-        console.log("Shortened URL is: " + url);
-        greet(sender_psid, response);
+        console.log("Shortened URL is: "+url);
+        callSendAPI(sender_psid, response);
       });
 
       // Sends the response message
@@ -138,7 +139,7 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
-async function greet(sender_psid, response) {
+async function greet(sender_psid) {
   let greetings = {
     recipient: {
       id: sender_psid,
@@ -149,25 +150,21 @@ async function greet(sender_psid, response) {
   };
 
   //some greetings
-  console.log(
-    "GREET RES: " +
-      request(
-        {
-          uri: "https://graph.facebook.com/v2.6/me/messages",
-          qs: { access_token: PAGE_ACCESS_TOKEN },
-          method: "POST",
-          json: greetings,
-        },
-        (err, res, body) => {
-          if (!err) {
-            console.log("Greetings Sent!");
-          } else {
-            console.error("Unable to send greetings:" + err);
-          }
-        },
-        callSendAPI(sender_psid, response)
-      )
-  );
+  console.log(request(
+    {
+      uri: "https://graph.facebook.com/v2.6/me/messages",
+      qs: { access_token: PAGE_ACCESS_TOKEN },
+      method: "POST",
+      json: greetings,
+    },
+    (err, res, body) => {
+      if (!err) {
+        console.log("Greetings Sent!");
+      } else {
+        console.error("Unable to send greetings:" + err);
+      }
+    }
+  ).response)
 }
 
 async function nourl(sender_psid) {
