@@ -106,7 +106,6 @@ function handleMessage(sender_psid, received_message) {
   } catch (error) {
     console.log("error catched");
     console.log(error);
-    nourl(sender_psid);
   }
 }
 
@@ -154,7 +153,7 @@ async function greet(sender_psid) {
   //some greetings
   var tt = request(
     {
-      uri: "https://graph.facebook.com/v2.6/me/messages",
+      uri: "https://graph.facebook.com/v8.0/me/messages",
       qs: { access_token: PAGE_ACCESS_TOKEN },
       method: "POST",
       json: greetings,
@@ -167,7 +166,13 @@ async function greet(sender_psid) {
       }
     }
   )
-  console.log("yow: "+JSON.stringify(tt))
+  console.log("yow: "+JSON.stringify(tt.on('response',(res)=> {
+    if (res.statusCode == 200) {
+      console.log("CODE WAS 200")
+    } else {
+      console.log("WASNT 200")
+    }
+  })))
 }
 
 async function nourl(sender_psid) {
