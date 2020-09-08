@@ -79,7 +79,7 @@ app.get("/webhook", (req, res) => {
 function handleMessage(sender_psid, received_message) {
   // console.log(val.isURL(received_message.text) + "url")
   // Check if the message contains text
-  typing();
+  typing(sender_psid);
   try {
     if (received_message.text && val.isURL(received_message.text)) {
       let response;
@@ -191,7 +191,7 @@ async function nourl(sender_psid) {
   );
 }
 
-function typing() {
+function typing(sender_psid) {
   let typing = {
     recipient: {
       id: sender_psid,
