@@ -26,14 +26,14 @@ app.post("/webhook", (req, res) => {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
       console.log("webhook event obj: " + JSON.stringify(webhook_event));
-      console.log("webhook event objMSG: " + JSON.stringify(webhook_event.message));
-
+      console.log(
+        "webhook event objMSG: " + JSON.stringify(webhook_event.message)
+      );
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      
+
       console.log("Sender PSID: " + sender_psid);
-      
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
@@ -82,28 +82,20 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-  // console.log(val.isURL(received_message.text) + "url")
-  // Check if the message contains text
-  
   try {
     if (received_message.text && val.isURL(received_message.text)) {
-      greet(sender_psid).then( () => {
-        //console.log("Message was: " + received_message.text);
-      let response;
-      
-      shortUrl.short(received_message.text, function (err, url) {
-        response = {
-          text: url,
-        };
-        console.log("Shortened URL is: "+url);
-        callSendAPI(sender_psid, response);
-      });
-      })
-      
+      greet(sender_psid).then(() => {
+        let response;
 
-      // Sends the response message
+        shortUrl.short(received_message.text, function (err, url) {
+          response = {
+            text: url,
+          };
+          console.log("Shortened URL is: " + url);
+          callSendAPI(sender_psid, response);
+        });
+      });
     } else {
-      //console.log("no url or no text in message");
       nourl(sender_psid);
     }
   } catch (error) {
@@ -135,7 +127,8 @@ function callSendAPI(sender_psid, response) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("URL Shortened Successfully! ~~");
+        console.log("URL Shortened Successfully! ~~:  " + res.statusCode);
+        
       } else {
         console.error("Unable to send message:" + err);
       }
@@ -163,13 +156,13 @@ async function greet(sender_psid) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("Greetings Sent!");
-        console.log(JSON.stringify(res) + res.statusCode)
+        console.log("Greetings Sent!:  ");
+        console.log(JSON.stringify(res) + res.statusCode);
       } else {
         console.error("Unable to send greetings:" + err);
       }
     }
-  )
+  );
 }
 
 async function nourl(sender_psid) {
@@ -192,7 +185,7 @@ async function nourl(sender_psid) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("\'Please enter a valid URL.\' message sent.");
+        console.log("'Please enter a valid URL.' message sent. :: " + res.statusCode);
       } else {
         console.error("Unable to send error message:" + err);
       }
