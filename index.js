@@ -76,6 +76,7 @@ app.get("/webhook", (req, res) => {
 function handleMessage(sender_psid, received_message) {
   try {
     if (received_message.text && val.isURL(received_message.text)) {
+      console.log("Received Msg: ", received_message.text);
       greet(sender_psid).then(() => {
         let response;
 
@@ -120,7 +121,6 @@ function callSendAPI(sender_psid, response) {
     (err, res, body) => {
       if (!err) {
         console.log("URL Shortened Successfully! ~~:  " + res.statusCode, body);
-        
       } else {
         console.error("Unable to send message:" + err);
       }
@@ -148,8 +148,7 @@ async function greet(sender_psid) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("Greetings Sent!:  ");
-        console.log(JSON.stringify(res) + res.statusCode);
+        console.log("Greetings Sent!:  ", res.statusCode);
       } else {
         console.error("Unable to send greetings:" + err);
       }
@@ -177,7 +176,9 @@ async function nourl(sender_psid) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("'Please enter a valid URL.' message sent. :: " + res.statusCode);
+        console.log(
+          "'Please enter a valid URL.' message sent. :: " + res.statusCode
+        );
       } else {
         console.error("Unable to send error message:" + err);
       }
