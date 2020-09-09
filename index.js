@@ -17,7 +17,6 @@ app.listen(PORT, () => console.log(`Server running at port ${PORT}`));
 // Creates the endpoint for our webhook
 app.post("/webhook", (req, res) => {
   let body = req.body;
-  //console.log(body);
 
   // Checks this is an event from a page subscription
   if (body.object === "page") {
@@ -25,20 +24,13 @@ app.post("/webhook", (req, res) => {
     body.entry.forEach(function (entry) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
-      console.log("webhook event obj: " + JSON.stringify(webhook_event));
-      console.log(
-        "webhook event objMSG: " + JSON.stringify(webhook_event.message)
-      );
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
 
-      console.log("Sender PSID: " + sender_psid);
-
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        console.log("handling a message: " + webhook_event.message.text);
         typing(sender_psid);
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
@@ -127,7 +119,7 @@ function callSendAPI(sender_psid, response) {
     },
     (err, res, body) => {
       if (!err) {
-        console.log("URL Shortened Successfully! ~~:  " + res.statusCode);
+        console.log("URL Shortened Successfully! ~~:  " + res.statusCode, body);
         
       } else {
         console.error("Unable to send message:" + err);
