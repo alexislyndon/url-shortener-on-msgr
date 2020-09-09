@@ -74,9 +74,9 @@ app.get("/webhook", (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
+  console.log("Received Msg: ", received_message.text);
   try {
     if (received_message.text && val.isURL(received_message.text)) {
-      console.log("Received Msg: ", received_message.text);
       greet(sender_psid).then(() => {
         let response;
 
